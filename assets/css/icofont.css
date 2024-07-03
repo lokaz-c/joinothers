@@ -2075,7 +2075,7 @@ url("../fonts/icofont.woff") format("woff");
 
 .icofont-energy-water:before
 {
-  content: "\e998";
+  content: "\e10";
 }
 
 .icofont-engineer:before
