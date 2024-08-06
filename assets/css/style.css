@@ -3289,6 +3289,7 @@ table p {
 */
 .home-slider-area.slider-default {
   position: relative;
+  
 }
 .home-slider-area.slider-default .home-slider-content .home-slider-item {
   height: 900px;
@@ -3354,10 +3355,11 @@ table p {
 }
 .home-slider-area.slider-default .slider-content-area .content {
   margin-top: 27px;
+  width: 200%;
 }
 @media (max-width: 1799px) {
   .home-slider-area.slider-default .slider-content-area .content {
-    margin-top: 15px;
+    margin-top: 0px;
     padding-right: 135px;
   }
 }
@@ -3867,6 +3869,10 @@ table p {
   }
 }
 
+.img1{
+  display: flex;
+  justify-content: left;
+}
 /*
 -----------------------------------------------------------------------
 	About CSS
