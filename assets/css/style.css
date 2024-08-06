@@ -3319,10 +3319,13 @@ table p {
     height: 360px;
   }
 }
+.homer{
+  height: 50%;
+}
 .home-slider-area.slider-default .slider-content-area {
   align-items: center;
   display: flex;
-  height: 100%;
+  height: 50%;
   padding-top: 124px;
   position: relative;
 }
