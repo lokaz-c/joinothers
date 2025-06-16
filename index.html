@@ -37,6 +37,10 @@
   <!--== Main Style CSS ==-->
   <link href="assets/css/style.css" rel="stylesheet" />
 
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
 </head>
 
 <body>
@@ -151,22 +155,16 @@
       </section>
 
       <!-- ANNOUNCEMENT CAROUSEL SECTION -->
-      <section class="announcement-carousel-section py-5 bg-white">
+      <section id="home-announcement" class="py-5 bg-light">
         <div class="container">
           <div class="row justify-content-center">
-            <div class="col-lg-8">
-              <h2 class="text-center mb-4 font-weight-bold text-theme-color">Latest Announcements</h2>
+            <div class="col-lg-10 mx-auto">
+              <h2 class="text-center mb-4 font-weight-bold" style="color:#a10532; font-family: 'Yeseva One', serif;">Latest Announcements</h2>
               <div class="swiper-container announcement-swiper">
                 <div class="swiper-wrapper" id="announcement-carousel-list">
-                  <div class="swiper-slide">
-                    <div class="announcement p-4 bg-light rounded shadow-sm text-center">
-                      <h4 class="font-weight-bold mb-2">Welcome to the new Announcements page!</h4>
-                      <p class="mb-1">Stay tuned for updates and important news here.</p>
-                      <small class="text-muted">Posted: Today</small>
-                    </div>
-                  </div>
+                  <!-- Slides will be injected by JS -->
                 </div>
-                <div class="swiper-pagination"></div>
+                <div class="swiper-pagination mt-3"></div>
                 <div class="swiper-button-prev"></div>
                 <div class="swiper-button-next"></div>
               </div>
@@ -174,35 +172,6 @@
           </div>
         </div>
       </section>
-      <script>
-        // Announcement Carousel Dynamic Loader
-        document.addEventListener('DOMContentLoaded', function() {
-          // Load announcements from localStorage if available
-          let announcements = [];
-          try {
-            announcements = JSON.parse(localStorage.getItem('announcements')) || [];
-          } catch (e) {}
-          const carouselList = document.getElementById('announcement-carousel-list');
-          if (announcements.length > 0 && carouselList) {
-            carouselList.innerHTML = '';
-            announcements.forEach(function(a) {
-              const slide = document.createElement('div');
-              slide.className = 'swiper-slide';
-              slide.innerHTML = `<div class='announcement p-4 bg-light rounded shadow-sm text-center'><h4 class='font-weight-bold mb-2'>${a.title}</h4><p class='mb-1'>${a.body}</p><small class='text-muted'>Posted: ${a.date}</small></div>`;
-              carouselList.appendChild(slide);
-            });
-          }
-          // Initialize Swiper
-          if (window.Swiper) {
-            new Swiper('.announcement-swiper', {
-              loop: true,
-              pagination: { el: '.swiper-pagination', clickable: true },
-              navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
-              autoplay: { delay: 6000, disableOnInteraction: false },
-            });
-          }
-        });
-      </script>
 
       <!-- IMPACT/STATISTICS SECTION -->
       <section class="impact-section py-5 bg-light">
@@ -569,11 +538,65 @@
   <!--=== Custom Js ===-->
   <script src="assets/js/custom.js"></script>
 
+  <!-- Custom script for Firebase and GTranslate override -->
   <script>
+    // Your web app's Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyAZfm1SzLGPP6ntb1UzwoclNNm7j8Ssm3E",
+      authDomain: "joinothers-a918b.firebaseapp.com",
+      projectId: "joinothers-a918b",
+      storageBucket: "joinothers-a918b.firebasestorage.app",
+      messagingSenderId: "318754580895",
+      appId: "1:318754580895:web:85582cdedd0b14dc06b5aa",
+      measurementId: "G-DKMZ9X88X8"
+    };
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    // Announcement Carousel Dynamic Loader - Now loads from Firestore
+    function loadAnnouncementCarousel() {
+      const carouselList = document.getElementById('announcement-carousel-list');
+      if (!carouselList) return;
+
+      // Listen for real-time updates from Firestore
+      db.collection('announcements').orderBy('date', 'desc').onSnapshot(snapshot => {
+        carouselList.innerHTML = ''; // Clear existing slides
+        if (snapshot.empty) {
+          carouselList.innerHTML = `<div class="swiper-slide"><div class="announcement p-4 bg-white rounded shadow-sm text-center"><h4 class="font-weight-bold mb-2" style="font-family: 'Yeseva One', serif; color:#000;">Welcome to the new Announcements!</h4><p class="mb-1">Stay tuned for updates and important news here.</p><small class="text-muted">Posted: Today</small></div></div>`;
+        } else {
+          snapshot.forEach(doc => {
+            const a = doc.data();
+            const slide = document.createElement('div');
+            slide.className = 'swiper-slide';
+            slide.innerHTML = `<div class='announcement p-4 bg-white rounded shadow-sm text-center'><h4 class='font-weight-bold mb-2' style="font-family: 'Yeseva One', serif; color:#000;">${a.title}</h4><p class='mb-1'>${a.body}</p><small class='text-muted'>Posted: ${a.date}</small></div>`;
+            carouselList.appendChild(slide);
+          });
+        }
+
+        // Initialize/Re-initialize Swiper after slides are loaded
+        if (window.Swiper) {
+          if (window.announcementSwiper) {
+            window.announcementSwiper.destroy(true, true);
+          }
+          window.announcementSwiper = new Swiper('.announcement-swiper', {
+            loop: true,
+            slidesPerView: 1,
+            spaceBetween: 0,
+            navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
+            pagination: { el: '.swiper-pagination', clickable: true },
+            autoplay: { delay: 6000, disableOnInteraction: false },
+          });
+        }
+      });
+    }
+
+    // Call the function when the window loads
+    window.addEventListener('load', loadAnnouncementCarousel);
+
     // GTranslate override: Replace 'Maison' with 'Accueil' in French
     function overrideMaisonToAccueil() {
       if (document.documentElement.lang === 'fr') {
-        // Replace only visible text nodes containing 'Maison'
         const treeWalker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null, false);
         let node;
         while ((node = treeWalker.nextNode())) {
@@ -583,10 +606,9 @@
         }
       }
     }
-    // Observe DOM changes for dynamic translation
+    // Observe DOM changes for dynamic translation and run on load
     const observer = new MutationObserver(overrideMaisonToAccueil);
     observer.observe(document.body, { childList: true, subtree: true });
-    // Also run on page load
     window.addEventListener('DOMContentLoaded', overrideMaisonToAccueil);
     window.addEventListener('load', overrideMaisonToAccueil);
   </script>
