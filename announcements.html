@@ -144,7 +144,24 @@
       </section>
     </main>
   </div>
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
   <script>
+    // Your web app's Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyAZfm1SzLGPP6ntb1UzwoclNNm7j8Ssm3E",
+      authDomain: "joinothers-a918b.firebaseapp.com",
+      projectId: "joinothers-a918b",
+      storageBucket: "joinothers-a918b.firebasestorage.app",
+      messagingSenderId: "318754580895",
+      appId: "1:318754580895:web:85582cdedd0b14dc06b5aa",
+      measurementId: "G-DKMZ9X88X8"
+    };
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
     // Password-protected access to announcements
     const goToBtn = document.getElementById('goToAnnouncementsBtn');
     const passwordPrompt = document.getElementById('passwordPrompt');
@@ -178,41 +195,36 @@
       }
     });
 
-    // Render all announcements from localStorage
+    // Render all announcements from Firestore
     function renderAnnouncements() {
       const list = document.getElementById('announcements-list');
-      let announcements = [];
-      try {
-        announcements = JSON.parse(localStorage.getItem('announcements')) || [];
-      } catch (e) {}
-      list.innerHTML = '';
-      if (announcements.length === 0) {
-        list.innerHTML = `<div class='announcement mb-4 p-4 bg-white rounded shadow-sm text-center'><h4 class='font-weight-bold mb-2'>No announcements yet.</h4></div>`;
-        return;
-      }
-      announcements.forEach((a, idx) => {
-        const announcement = document.createElement('div');
-        announcement.className = 'announcement mb-4 p-4 bg-white rounded shadow-sm position-relative';
-        announcement.innerHTML = `
-          <button class='btn btn-danger btn-sm position-absolute' style='top:10px;right:10px;' onclick='deleteAnnouncement(${idx})' title='Delete'>&times;</button>
-          <h4 class='font-weight-bold mb-2'>${a.title}</h4>
-          <p class='mb-1'>${a.body}</p>
-          <small class='text-muted'>Posted: ${a.date}</small>
-        `;
-        list.appendChild(announcement);
+      list.innerHTML = '<div class="text-center">Loading...</div>';
+      db.collection('announcements').orderBy('date', 'desc').onSnapshot(snapshot => {
+        list.innerHTML = '';
+        if (snapshot.empty) {
+          list.innerHTML = `<div class='announcement mb-4 p-4 bg-white rounded shadow-sm text-center'><h4 class='font-weight-bold mb-2'>No announcements yet.</h4></div>`;
+          return;
+        }
+        snapshot.forEach(doc => {
+          const a = doc.data();
+          const idx = doc.id;
+          const announcement = document.createElement('div');
+          announcement.className = 'announcement mb-4 p-4 bg-white rounded shadow-sm position-relative';
+          announcement.innerHTML = `
+            <button class='btn btn-danger btn-sm position-absolute' style='top:10px;right:10px;' onclick='deleteAnnouncement("${idx}")' title='Delete'>&times;</button>
+            <h4 class='font-weight-bold mb-2'>${a.title}</h4>
+            <p class='mb-1'>${a.body}</p>
+            <small class='text-muted'>Posted: ${a.date}</small>
+          `;
+          list.appendChild(announcement);
+        });
       });
     }
 
     // Make deleteAnnouncement globally available
     window.deleteAnnouncement = function(idx) {
       if (!confirm('Are you sure you want to delete this announcement?')) return;
-      let announcements = [];
-      try {
-        announcements = JSON.parse(localStorage.getItem('announcements')) || [];
-      } catch (e) {}
-      announcements.splice(idx, 1);
-      localStorage.setItem('announcements', JSON.stringify(announcements));
-      renderAnnouncements();
+      db.collection('announcements').doc(idx).delete();
     };
 
     // Announcement posting logic
@@ -234,29 +246,18 @@
         errorDiv.classList.remove('d-none');
         return;
       }
-      // Save to localStorage for homepage carousel
-      let announcements = [];
-      try {
-        announcements = JSON.parse(localStorage.getItem('announcements')) || [];
-      } catch (e) {}
-      const now = new Date();
-      const dateString = now.toLocaleString();
-      const newAnnouncement = { title, body, date: dateString };
-      announcements.unshift(newAnnouncement);
-      localStorage.setItem('announcements', JSON.stringify(announcements));
-      renderAnnouncements();
-      document.getElementById('announcementForm').reset();
+      db.collection('announcements').add({
+        title,
+        body,
+        date: new Date().toLocaleString()
+      }).then(() => {
+        document.getElementById('announcementForm').reset();
+      });
     });
-
-    // If already unlocked (e.g. after posting), show announcements
-    if (announcementsSection.style.display === 'block') {
-      renderAnnouncements();
-    }
 
     // GTranslate override: Replace 'Maison' with 'Accueil' in French
     function overrideMaisonToAccueil() {
       if (document.documentElement.lang === 'fr') {
-        // Replace only visible text nodes containing 'Maison'
         const treeWalker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null, false);
         let node;
         while ((node = treeWalker.nextNode())) {
@@ -266,10 +267,8 @@
         }
       }
     }
-    // Observe DOM changes for dynamic translation
     const observer = new MutationObserver(overrideMaisonToAccueil);
     observer.observe(document.body, { childList: true, subtree: true });
-    // Also run on page load
     window.addEventListener('DOMContentLoaded', overrideMaisonToAccueil);
     window.addEventListener('load', overrideMaisonToAccueil);
   </script>
