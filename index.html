@@ -80,9 +80,24 @@
                   <li><a href="about.html">About Us</a></li>
                   <li class="has-submenu"><a href="#">Services</a>
                     <ul class="submenu-nav">
-                      <li><a href="advice.html">Advice</a></li>
-                      <li><a href="volunteer.html">Volunteer</a></li>
-                      <li><a href="specific.html">Specific Support</a></li>
+                      <li class="has-submenu"><a href="#">Personal Development Coaching</a>
+                        <ul class="submenu-nav">
+                          <li><a href="#">Individual Coaching</a></li>
+                          <li><a href="#">Seminars and Events</a></li>
+                        </ul>
+                      </li>
+                      <li class="has-submenu"><a href="#">Child Care</a>
+                        <ul class="submenu-nav">
+                          <li class="has-submenu"><a href="#">ECDS</a>
+                            <ul class="submenu-nav">
+                              <li><a href="#">Work Buildings</a></li>
+                            </ul>
+                          </li>
+                          <li><a href="#">Open Safe Spaces</a></li>
+                          <li><a href="#">Professional Nannies</a></li>
+                          <li><a href="#">Professional Home Assistants</a></li>
+                        </ul>
+                      </li>
                     </ul>
                   </li>
                   
@@ -134,6 +149,60 @@
           </div>
         </div>
       </section>
+
+      <!-- ANNOUNCEMENT CAROUSEL SECTION -->
+      <section class="announcement-carousel-section py-5 bg-white">
+        <div class="container">
+          <div class="row justify-content-center">
+            <div class="col-lg-8">
+              <h2 class="text-center mb-4 font-weight-bold text-theme-color">Latest Announcements</h2>
+              <div class="swiper-container announcement-swiper">
+                <div class="swiper-wrapper" id="announcement-carousel-list">
+                  <div class="swiper-slide">
+                    <div class="announcement p-4 bg-light rounded shadow-sm text-center">
+                      <h4 class="font-weight-bold mb-2">Welcome to the new Announcements page!</h4>
+                      <p class="mb-1">Stay tuned for updates and important news here.</p>
+                      <small class="text-muted">Posted: Today</small>
+                    </div>
+                  </div>
+                </div>
+                <div class="swiper-pagination"></div>
+                <div class="swiper-button-prev"></div>
+                <div class="swiper-button-next"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <script>
+        // Announcement Carousel Dynamic Loader
+        document.addEventListener('DOMContentLoaded', function() {
+          // Load announcements from localStorage if available
+          let announcements = [];
+          try {
+            announcements = JSON.parse(localStorage.getItem('announcements')) || [];
+          } catch (e) {}
+          const carouselList = document.getElementById('announcement-carousel-list');
+          if (announcements.length > 0 && carouselList) {
+            carouselList.innerHTML = '';
+            announcements.forEach(function(a) {
+              const slide = document.createElement('div');
+              slide.className = 'swiper-slide';
+              slide.innerHTML = `<div class='announcement p-4 bg-light rounded shadow-sm text-center'><h4 class='font-weight-bold mb-2'>${a.title}</h4><p class='mb-1'>${a.body}</p><small class='text-muted'>Posted: ${a.date}</small></div>`;
+              carouselList.appendChild(slide);
+            });
+          }
+          // Initialize Swiper
+          if (window.Swiper) {
+            new Swiper('.announcement-swiper', {
+              loop: true,
+              pagination: { el: '.swiper-pagination', clickable: true },
+              navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
+              autoplay: { delay: 6000, disableOnInteraction: false },
+            });
+          }
+        });
+      </script>
 
       <!-- IMPACT/STATISTICS SECTION -->
       <section class="impact-section py-5 bg-light">
@@ -412,10 +481,12 @@
         <div class="container">
           <div class="footer-bottom-content">
             <div class="row align-items-center">
+              <div class="col-12 text-center">
+                <a href="announcements.html" class="btn-theme btn-gradient btn-slide btn-style my-3">Go to Announcements <img class="icon icon-img" src="assets/img/icons/arrow-line-right2.png" alt="Icon"></a>
+              </div>
               <div class="col-12">
                 <div class="widget-copyright text-center">
-                  <p>© 2024 <span>Join Others Rwanda</span>. Made with <i class="icon_heart"></i> by <a target="_blank"
-                      href="https://www..com/"></a></p>
+                  <p>© 2024 <span>Join Others Rwanda</span>. Made with <i class="icon_heart"></i> by <a target="_blank" href="https://www..com/"></a></p>
                 </div>
               </div>
             </div>

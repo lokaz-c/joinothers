@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Announcements | Join Others Rwanda</title>
+  <link rel="shortcut icon" href="assets/img/logo.png" type="image/png" />
+  <link href="https://fonts.googleapis.com/css?family=Yeseva+One:400" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,500,500i,700,700i" rel="stylesheet">
+  <link href="assets/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="assets/css/icofont.css" rel="stylesheet" />
+  <link href="assets/css/elegantIcons.css" rel="stylesheet" />
+  <link href="assets/css/animate.css" rel="stylesheet" />
+  <link href="assets/css/aos.css" rel="stylesheet" />
+  <link href="assets/css/jquery.fancybox.min.css" rel="stylesheet" />
+  <link href="assets/css/slicknav.css" rel="stylesheet" />
+  <link href="assets/css/swiper.min.css" rel="stylesheet" />
+  <link href="assets/css/style.css" rel="stylesheet" />
+</head>
+<body>
+  <div class="wrapper home-default-wrapper">
+    <!--== Start Header Wrapper ==-->
+    <header class="header-area header-default sticky-header">
+      <div class="container">
+        <div class="row align-items-center">
+          <div class="col-5 col-sm-3 col-md-3 col-lg-2 pr-0">
+            <div class="header-logo-area">
+              <a href="index.html">
+                <img class="logo-main" src="assets/img/logo.png" alt="Logo" />
+                <img class="logo-light" src="assets/img/logo.png" alt="Logo" />
+              </a>
+            </div>
+          </div>
+          <div class="col-7 col-sm-9 col-md-9 col-lg-10">
+            <div class="header-align">
+              <div class="header-navigation-area">
+                <ul class="main-menu nav justify-content-center">
+                  <li><a href="index.html">Home</a></li>
+                  <li><a href="about.html">About Us</a></li>
+                  <li class="has-submenu"><a href="#">Services</a>
+                    <ul class="submenu-nav">
+                      <li class="has-submenu"><a href="#">Personal Development Coaching</a>
+                        <ul class="submenu-nav">
+                          <li><a href="#">Individual Coaching</a></li>
+                          <li><a href="#">Seminars and Events</a></li>
+                        </ul>
+                      </li>
+                      <li class="has-submenu"><a href="#">Child Care</a>
+                        <ul class="submenu-nav">
+                          <li class="has-submenu"><a href="#">ECDS</a>
+                            <ul class="submenu-nav">
+                              <li><a href="#">Work Buildings</a></li>
+                            </ul>
+                          </li>
+                          <li><a href="#">Open Safe Spaces</a></li>
+                          <li><a href="#">Professional Nannies</a></li>
+                          <li><a href="#">Professional Home Assistants</a></li>
+                        </ul>
+                      </li>
+                    </ul>
+                  </li>
+                  <li class="has-submenu"><a href="blog.html">Blog</a></li>
+                  <li><a href="contact.html">Contact Us</a></li>
+                </ul>
+              </div>
+              <div class="header-action-area">
+                <button class="btn-menu d-xl-none">
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                </button>
+                <a href="contact.html" class="btn-theme btn-gradient btn-slide btn-style">Give Support <img class="icon icon-img" src="assets/img/icons/arrow-line-right2.png" alt="Icon"></a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+    <!--== End Header Wrapper ==-->
+
+    <main class="main-content site-wrapper-reveal">
+      <section class="page-title-area" data-bg-img="assets/img/photos/bg-page-title.jpg">
+        <div class="container">
+          <div class="row">
+            <div class="col-lg-12">
+              <div class="page-title-content text-center">
+                <h2 class="title">Announcements</h2>
+                <div class="bread-crumbs"><a href="index.html">Home<span class="breadcrumb-sep">//</span></a><span class="active">Announcements</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="py-5 bg-white">
+        <div class="container text-center">
+          <button id="goToAnnouncementsBtn" class="btn btn-theme btn-gradient btn-lg">Go to Announcements</button>
+          <div id="passwordPrompt" class="mt-4" style="display:none; max-width:400px; margin:auto;">
+            <input type="password" id="accessPassword" class="form-control mb-2" placeholder="Enter password">
+            <button id="submitPasswordBtn" class="btn btn-theme btn-gradient">Submit</button>
+            <div id="passwordError" class="text-danger mt-2" style="display:none;"></div>
+          </div>
+        </div>
+      </section>
+      <section id="announcements-section" class="announcements-section py-5 bg-light" style="display:none;">
+        <div class="container">
+          <div class="row justify-content-center">
+            <div class="col-lg-8">
+              <div id="announcements-list">
+                <div class="announcement mb-4 p-4 bg-white rounded shadow-sm">
+                  <h4 class="font-weight-bold mb-2">Welcome to the new Announcements page!</h4>
+                  <p class="mb-1">Stay tuned for updates and important news here.</p>
+                  <small class="text-muted">Posted: Today</small>
+                </div>
+                <!-- More announcements will appear here -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section id="admin-announcement-form-section" class="admin-announcement-form-section py-5" style="display:none;">
+        <div class="container">
+          <div class="row justify-content-center">
+            <div class="col-lg-6">
+              <div class="card shadow-sm">
+                <div class="card-body">
+                  <h3 class="mb-4 font-weight-bold text-theme-color">Post a New Announcement (Master User Only)</h3>
+                  <form id="announcementForm" autocomplete="off">
+                    <div class="form-group mb-3">
+                      <label for="announcement-title">Title</label>
+                      <input type="text" class="form-control" id="announcement-title" placeholder="Announcement title" required>
+                    </div>
+                    <div class="form-group mb-3">
+                      <label for="announcement-body">Message</label>
+                      <textarea class="form-control" id="announcement-body" rows="4" placeholder="Write your announcement..." required></textarea>
+                    </div>
+                    <div class="form-group mb-3">
+                      <label for="announcement-password">Master Password</label>
+                      <input type="password" class="form-control" id="announcement-password" placeholder="Enter password" required>
+                    </div>
+                    <button type="submit" class="btn btn-theme btn-gradient">Post Announcement</button>
+                  </form>
+                  <div id="announcement-error" class="alert alert-danger mt-3 d-none"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+  <script>
+    // Password-protected access to announcements
+    const goToBtn = document.getElementById('goToAnnouncementsBtn');
+    const passwordPrompt = document.getElementById('passwordPrompt');
+    const submitPasswordBtn = document.getElementById('submitPasswordBtn');
+    const accessPassword = document.getElementById('accessPassword');
+    const passwordError = document.getElementById('passwordError');
+    const announcementsSection = document.getElementById('announcements-section');
+    const adminFormSection = document.getElementById('admin-announcement-form-section');
+
+    goToBtn.addEventListener('click', function() {
+      passwordPrompt.style.display = 'block';
+      passwordError.style.display = 'none';
+      accessPassword.value = '';
+      accessPassword.focus();
+    });
+    submitPasswordBtn.addEventListener('click', function() {
+      if (accessPassword.value === 'JOR@2025') {
+        passwordPrompt.style.display = 'none';
+        goToBtn.style.display = 'none';
+        announcementsSection.style.display = 'block';
+        adminFormSection.style.display = 'block';
+      } else {
+        passwordError.textContent = 'Incorrect password. Please try again.';
+        passwordError.style.display = 'block';
+      }
+    });
+    accessPassword.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') {
+        submitPasswordBtn.click();
+      }
+    });
+
+    // Announcement posting logic
+    document.getElementById('announcementForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const title = document.getElementById('announcement-title').value.trim();
+      const body = document.getElementById('announcement-body').value.trim();
+      const password = document.getElementById('announcement-password').value;
+      const errorDiv = document.getElementById('announcement-error');
+      errorDiv.classList.add('d-none');
+      errorDiv.textContent = '';
+      if (password !== 'JOR@2025') {
+        errorDiv.textContent = 'Incorrect password. Please try again.';
+        errorDiv.classList.remove('d-none');
+        return;
+      }
+      if (!title || !body) {
+        errorDiv.textContent = 'Please fill in all fields.';
+        errorDiv.classList.remove('d-none');
+        return;
+      }
+      // Save to localStorage for homepage carousel
+      let announcements = [];
+      try {
+        announcements = JSON.parse(localStorage.getItem('announcements')) || [];
+      } catch (e) {}
+      const now = new Date();
+      const dateString = now.toLocaleString();
+      const newAnnouncement = { title, body, date: dateString };
+      announcements.unshift(newAnnouncement);
+      localStorage.setItem('announcements', JSON.stringify(announcements));
+      // Add announcement to the top of the list
+      const list = document.getElementById('announcements-list');
+      const announcement = document.createElement('div');
+      announcement.className = 'announcement mb-4 p-4 bg-white rounded shadow-sm';
+      announcement.innerHTML = `<h4 class="font-weight-bold mb-2">${title}</h4><p class="mb-1">${body}</p><small class="text-muted">Posted: ${dateString}</small>`;
+      list.insertBefore(announcement, list.firstChild);
+      document.getElementById('announcementForm').reset();
+    });
+  </script>
+</body>
+</html> 
