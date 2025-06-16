@@ -107,12 +107,7 @@
           <div class="row justify-content-center">
             <div class="col-lg-8">
               <div id="announcements-list">
-                <div class="announcement mb-4 p-4 bg-white rounded shadow-sm">
-                  <h4 class="font-weight-bold mb-2">Welcome to the new Announcements page!</h4>
-                  <p class="mb-1">Stay tuned for updates and important news here.</p>
-                  <small class="text-muted">Posted: Today</small>
-                </div>
-                <!-- More announcements will appear here -->
+                <!-- Announcements will be loaded here by JS -->
               </div>
             </div>
           </div>
@@ -171,6 +166,7 @@
         goToBtn.style.display = 'none';
         announcementsSection.style.display = 'block';
         adminFormSection.style.display = 'block';
+        renderAnnouncements();
       } else {
         passwordError.textContent = 'Incorrect password. Please try again.';
         passwordError.style.display = 'block';
@@ -181,6 +177,43 @@
         submitPasswordBtn.click();
       }
     });
+
+    // Render all announcements from localStorage
+    function renderAnnouncements() {
+      const list = document.getElementById('announcements-list');
+      let announcements = [];
+      try {
+        announcements = JSON.parse(localStorage.getItem('announcements')) || [];
+      } catch (e) {}
+      list.innerHTML = '';
+      if (announcements.length === 0) {
+        list.innerHTML = `<div class='announcement mb-4 p-4 bg-white rounded shadow-sm text-center'><h4 class='font-weight-bold mb-2'>No announcements yet.</h4></div>`;
+        return;
+      }
+      announcements.forEach((a, idx) => {
+        const announcement = document.createElement('div');
+        announcement.className = 'announcement mb-4 p-4 bg-white rounded shadow-sm position-relative';
+        announcement.innerHTML = `
+          <button class='btn btn-danger btn-sm position-absolute' style='top:10px;right:10px;' onclick='deleteAnnouncement(${idx})' title='Delete'>&times;</button>
+          <h4 class='font-weight-bold mb-2'>${a.title}</h4>
+          <p class='mb-1'>${a.body}</p>
+          <small class='text-muted'>Posted: ${a.date}</small>
+        `;
+        list.appendChild(announcement);
+      });
+    }
+
+    // Make deleteAnnouncement globally available
+    window.deleteAnnouncement = function(idx) {
+      if (!confirm('Are you sure you want to delete this announcement?')) return;
+      let announcements = [];
+      try {
+        announcements = JSON.parse(localStorage.getItem('announcements')) || [];
+      } catch (e) {}
+      announcements.splice(idx, 1);
+      localStorage.setItem('announcements', JSON.stringify(announcements));
+      renderAnnouncements();
+    };
 
     // Announcement posting logic
     document.getElementById('announcementForm').addEventListener('submit', function(e) {
@@ -211,14 +244,14 @@
       const newAnnouncement = { title, body, date: dateString };
       announcements.unshift(newAnnouncement);
       localStorage.setItem('announcements', JSON.stringify(announcements));
-      // Add announcement to the top of the list
-      const list = document.getElementById('announcements-list');
-      const announcement = document.createElement('div');
-      announcement.className = 'announcement mb-4 p-4 bg-white rounded shadow-sm';
-      announcement.innerHTML = `<h4 class="font-weight-bold mb-2">${title}</h4><p class="mb-1">${body}</p><small class="text-muted">Posted: ${dateString}</small>`;
-      list.insertBefore(announcement, list.firstChild);
+      renderAnnouncements();
       document.getElementById('announcementForm').reset();
     });
+
+    // If already unlocked (e.g. after posting), show announcements
+    if (announcementsSection.style.display === 'block') {
+      renderAnnouncements();
+    }
   </script>
 </body>
 </html> 
