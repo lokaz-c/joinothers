@@ -449,6 +449,28 @@
   <!--=== Custom Js ===-->
   <script src="assets/js/custom.js"></script>
 
+  <script>
+    // GTranslate override: Replace 'Maison' with 'Accueil' in French
+    function overrideMaisonToAccueil() {
+      if (document.documentElement.lang === 'fr') {
+        // Replace only visible text nodes containing 'Maison'
+        const treeWalker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null, false);
+        let node;
+        while ((node = treeWalker.nextNode())) {
+          if (node.nodeValue.includes('Maison')) {
+            node.nodeValue = node.nodeValue.replace(/Maison/g, 'Accueil');
+          }
+        }
+      }
+    }
+    // Observe DOM changes for dynamic translation
+    const observer = new MutationObserver(overrideMaisonToAccueil);
+    observer.observe(document.body, { childList: true, subtree: true });
+    // Also run on page load
+    window.addEventListener('DOMContentLoaded', overrideMaisonToAccueil);
+    window.addEventListener('load', overrideMaisonToAccueil);
+  </script>
+
 </body>
 
 
